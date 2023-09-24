@@ -1,2 +1,2 @@
-# Named Pets Runelite Plugin
-RuneLite plugin to name your pets on Old School Runescape
+# Named Pets
+Give your pets a name!
