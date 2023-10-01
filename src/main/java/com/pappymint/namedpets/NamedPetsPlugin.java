@@ -100,8 +100,6 @@ public class NamedPetsPlugin extends Plugin
 
 	private void savePetName(int petNpcId, String petName)
 	{
-		log.info("Save pet: " + petName + " (ID: " + petNpcId + ")");
-
 		if (Objects.equals(petName, "") || petName == null) {
 			configManager.unsetConfiguration(CONFIG_GROUP, String.valueOf(petNpcId));
 		} else {
