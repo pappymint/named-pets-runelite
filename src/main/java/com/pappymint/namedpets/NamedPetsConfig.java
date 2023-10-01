@@ -8,12 +8,12 @@ import net.runelite.client.config.ConfigItem;
 public interface NamedPetsConfig extends Config
 {
 	@ConfigItem(
-		keyName = "greeting",
-		name = "Welcome Greeting",
-		description = "The message to show to the user when they login"
+		keyName = "position",
+		name = "Adjust Name Position",
+		description = "Adjust the position the name above the pet (0 - 100)"
 	)
-	default String greeting()
+	default int getCustomPosition()
 	{
-		return "Hello";
+		return 0;
 	}
 }

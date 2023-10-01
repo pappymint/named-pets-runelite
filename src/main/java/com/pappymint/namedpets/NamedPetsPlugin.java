@@ -1,58 +1,71 @@
 package com.pappymint.namedpets;
 
-import com.google.common.base.Strings;
 import com.google.inject.Provides;
-import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.events.MenuOpened;
 import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
+import net.runelite.client.ui.ClientToolbar;
+import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
-import net.runelite.client.eventbus.Subscribe;
-import net.runelite.api.events.MenuOpened;
-
+import net.runelite.client.util.ImageUtil;
+import javax.inject.Inject;
+import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 @Slf4j
 @PluginDescriptor(
 	name = "Named Pets",
-	description = "Name your followed pets by right-clicking on them",
+	description = "Right click & name your fluffy friend!",
 	tags = {"pet"}
 )
 public class NamedPetsPlugin extends Plugin
 {
 	private static final String CONFIG_GROUP = "namedPets";
+	private static final BufferedImage SidePanelIcon = ImageUtil.loadImageResource(NamedPetsPlugin.class, "icon.png");
+	private NavigationButton sideButton;
 
 	@Inject
 	private Client client;
-
 	@Inject
 	private NamedPetsConfig config;
-
 	@Inject
 	private ChatboxPanelManager chatboxPanelManager;
-
 	@Inject
 	private ConfigManager configManager;
-
 	@Inject
 	private OverlayManager overlayManager;
-
 	@Inject
 	private PetNameOverlay petNameOverlay;
+	@Inject
+	private ClientToolbar clientToolbar;
 
 	@Override
 	protected void startUp() throws Exception
 	{
+		// Overlay manager renders the names above the pet
 		overlayManager.add(petNameOverlay);
+
+		// Panel is the menu item along the side to configure & view set pet names
+		NamedPetsPanel panel = new NamedPetsPanel(this);
+		sideButton = NavigationButton.builder()
+				.tooltip("Named Pets")
+				.icon(SidePanelIcon)
+				.priority(9)
+				.panel(panel)
+				.build();
+		clientToolbar.addNavigation(sideButton);
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
 		overlayManager.remove(petNameOverlay);
+		clientToolbar.removeNavigation(sideButton);
 	}
 
 	@Subscribe
