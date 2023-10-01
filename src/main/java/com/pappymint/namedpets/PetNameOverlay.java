@@ -45,14 +45,29 @@ public class PetNameOverlay extends Overlay
     }
 
     private void renderFollowingPetName(Graphics2D graphics, Actor petActor, int petId) {
-        // Gets stored pet name from config manager
-        String followingPetName = configManager.getConfiguration(CONFIG_GROUP, String.valueOf(petId));
+        // Gets stored pet name + name color from config manager
+        String followingPetName = configManager.getConfiguration(CONFIG_GROUP, petId + "-name");
+        Color nameColor = getPetNameColor(petId);
+
         // Default config height to 0 if it isnt between 1 - 100
         int customHeightIncrease = pluginConfig.getCustomPosition() > 0 && pluginConfig.getCustomPosition() <= 100 ? pluginConfig.getCustomPosition() : 0;
         Point petNameLocation = petActor.getCanvasTextLocation(graphics, followingPetName, petActor.getModelHeight() + customHeightIncrease);
 
         if (petNameLocation != null) {
-            OverlayUtil.renderTextLocation(graphics, petNameLocation, followingPetName, Color.PINK);
+            OverlayUtil.renderTextLocation(graphics, petNameLocation, followingPetName, nameColor);
+        }
+    }
+
+    private Color getPetNameColor(int petId) {
+        String customColorSetForPet = configManager.getConfiguration(CONFIG_GROUP, petId + "-color");
+        Color defaultConfigColor = pluginConfig.getDefaultPetNameColor();
+
+        if (customColorSetForPet != null) {
+            return Color.decode(customColorSetForPet);
+        } else if (defaultConfigColor != null) {
+            return defaultConfigColor;
+        } else {
+            return Color.white;
         }
     }
 }

@@ -4,6 +4,8 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
+import java.awt.Color;
+
 @ConfigGroup("namedpets")
 public interface NamedPetsConfig extends Config
 {
@@ -16,4 +18,11 @@ public interface NamedPetsConfig extends Config
 	{
 		return 0;
 	}
+
+	@ConfigItem(
+			keyName = "defaultNameColor",
+			name = "Pet Name Color",
+			description = "A default color for pet names. If you individually set a color for a pet name, that will be set first."
+	)
+	default Color getDefaultPetNameColor() { return new Color(255, 255, 255); }
 }

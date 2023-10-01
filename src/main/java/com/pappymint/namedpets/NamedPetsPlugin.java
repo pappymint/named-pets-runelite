@@ -116,8 +116,13 @@ public class NamedPetsPlugin extends Plugin
 		if (Objects.equals(petName, "") || petName == null) {
 			configManager.unsetConfiguration(CONFIG_GROUP, String.valueOf(petNpcId));
 		} else {
-			configManager.setConfiguration(CONFIG_GROUP, String.valueOf(petNpcId), petName);
+			configManager.setConfiguration(CONFIG_GROUP, petNpcId + "-name", petName);
 		}
+	}
+
+	private void saveNameColor(int petNpcId, String nameColor)
+	{
+		configManager.setConfiguration(CONFIG_GROUP, petNpcId + "-color", nameColor);
 	}
 
 	@Provides
