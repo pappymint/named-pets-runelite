@@ -15,22 +15,22 @@ import javax.inject.Inject;
 
 public class PetNameOverlay extends Overlay
 {
-    private static final String CONFIG_GROUP = "namedPets";
     private final NamedPetsConfig pluginConfig;
-
-    @Inject
-    private ConfigManager configManager;
+    private final NamedPetsPlugin plugin;
+    private final NamedPetsConfigManager configManager;
 
     @Inject
     private Client client;
 
     @Inject
-    private PetNameOverlay(NamedPetsConfig pluginConfig)
+    private PetNameOverlay(NamedPetsPlugin plugin, NamedPetsConfig pluginConfig, NamedPetsConfigManager configManager)
     {
         setPosition(OverlayPosition.DYNAMIC);
         setLayer(OverlayLayer.ABOVE_SCENE);
 
         this.pluginConfig = pluginConfig;
+        this.configManager = configManager;
+        this.plugin = plugin;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class PetNameOverlay extends Overlay
 
     private void renderFollowingPetName(Graphics2D graphics, Actor petActor, int petId) {
         // Gets stored pet name + name color from config manager
-        String followingPetName = configManager.getConfiguration(CONFIG_GROUP, petId + "-name");
+        String followingPetName = configManager.getSavedPetName(petId);
         Color nameColor = getPetNameColor(petId);
 
         // Default config height to 0 if it isnt between 1 - 100
@@ -59,7 +59,7 @@ public class PetNameOverlay extends Overlay
     }
 
     private Color getPetNameColor(int petId) {
-        String customColorSetForPet = configManager.getConfiguration(CONFIG_GROUP, petId + "-color");
+        String customColorSetForPet = configManager.getSavedPetColor(petId);
         Color defaultConfigColor = pluginConfig.getDefaultPetNameColor();
 
         if (customColorSetForPet != null) {
