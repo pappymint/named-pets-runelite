@@ -162,7 +162,10 @@ public class NamedPetsPlugin extends Plugin
 		} else {
 			pluginConfigManager.setPetName(petNpcId, petName);
 		}
-		panel.renderPetsList();
+
+		if (!config.hidePetPanel()) {
+			panel.renderPetsList();
+		}
 	}
 
 	private String getExistingPetName(int petNpcId)
@@ -182,7 +185,10 @@ public class NamedPetsPlugin extends Plugin
 	private void saveNameColor(int petNpcId, Color nameColor)
 	{
 		pluginConfigManager.setPetColor(petNpcId, nameColor);
-		panel.renderPetsList();
+
+		if (!config.hidePetPanel()) {
+			panel.renderPetsList();
+		}
 	}
 
 	private Color getExistingPetNameColor(int petNpcId)
