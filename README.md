@@ -10,3 +10,5 @@ To-dos:
 * Colour pet names
 * Change positioning of name
 * List all set pet names on the config panel
+* View banked pets / pets in POH in the panel
+* Support emojis in pet names

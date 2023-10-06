@@ -1,5 +1,6 @@
 package com.pappymint.namedpets;
 
+import net.runelite.api.NPC;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.ui.PluginPanel;
@@ -38,16 +39,34 @@ public class NamedPetsPanel extends PluginPanel {
         JLabel title = new JLabel("Named Pets");
         mainPanel.add(title);
 
-        List<String> petNamesInConfig = configManager.getAllPetConfig();
-        JLabel numOfNames = new JLabel(petNamesInConfig.size() + " named pets");
+        List<String> configKeys = configManager.getAllPetConfig();
+        JLabel numOfNames = new JLabel(configKeys.size() + " named pets");
         mainPanel.add(numOfNames);
 
-        for (String key : petNamesInConfig)
+        // TODO: Refactor how we can manage config so this isn't so hacky
+        for (String key : configKeys)
         {
-            JLabel newPanel = new JLabel(key);
-            JLabel hi = new JLabel("Hi");
-            mainPanel.add(newPanel);
-            mainPanel.add(hi);
+            String nameKey = key.split("\\.")[1];
+            if (nameKey != null) {
+                int npcID = Integer.parseInt(nameKey.split("-")[1]);
+                String petName = configManager.getSavedPetName(npcID);
+                Color petColor = Color.decode(configManager.getSavedPetColor(npcID));
+
+                JLabel newPanel = new JLabel(petName + ": ID " + npcID + ", " + petColor);
+                mainPanel.add(newPanel);
+
+                /**
+                 * To get the NPC inventory item sprite
+                 * We may need to create a manual map between npc ID to item ID
+                 * then get the item sprite by ID
+                 */
+
+
+                // Need:
+                // Name of NPC
+                // Name given
+                // Color given
+            }
         }
 
         revalidate();
