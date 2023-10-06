@@ -30,10 +30,6 @@ public class NamedPetsConfigManager {
         return CONFIG_COLOR + "-" + petId;
     }
 
-    public String getValueFromKey(String key) {
-        return configManager.getConfiguration(CONFIG_GROUP, key);
-    }
-
     // *** Pet Name Getters/Setters ***
     public String getSavedPetName(int petId) {
         return configManager.getConfiguration(CONFIG_GROUP, nameConfigKey(petId));
@@ -51,9 +47,6 @@ public class NamedPetsConfigManager {
     }
     public void setPetColor(int petId, Color petNameColor) {
         configManager.setConfiguration(CONFIG_GROUP, colorConfigKey(petId), petNameColor);
-    }
-    public void unsetPetColor(int petId) {
-        configManager.unsetConfiguration(CONFIG_GROUP, colorConfigKey(petId));
     }
 
     // *** Pet List ***
