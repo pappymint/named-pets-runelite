@@ -25,4 +25,11 @@ public interface NamedPetsConfig extends Config
 			description = "A default color for pet names. If you individually set a color for a pet name, that will be set first."
 	)
 	default Color getDefaultPetNameColor() { return new Color(255, 255, 255); }
+
+	@ConfigItem(
+			keyName = "hidePanel",
+			name = "Hide Named Pets Panel",
+			description = "Hide the named pets panel to the right (client restart is required for this to be effective)"
+	)
+	default boolean hidePetPanel() { return false; }
 }

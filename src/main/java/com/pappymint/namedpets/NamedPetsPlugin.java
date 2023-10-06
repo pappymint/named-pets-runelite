@@ -58,14 +58,16 @@ public class NamedPetsPlugin extends Plugin
 		pluginConfigManager = new NamedPetsConfigManager(this, configManager);
 
 		// Panel is the menu item along the side to configure & view set pet names
-		panel = new NamedPetsPanel(this, config, pluginConfigManager);
-		sideButton = NavigationButton.builder()
-				.tooltip("Named Pets")
-				.icon(SidePanelIcon)
-				.priority(9)
-				.panel(panel)
-				.build();
-		clientToolbar.addNavigation(sideButton);
+		if (!config.hidePetPanel()) {
+			panel = new NamedPetsPanel(this, config, pluginConfigManager);
+			sideButton = NavigationButton.builder()
+					.tooltip("Named Pets")
+					.icon(SidePanelIcon)
+					.priority(9)
+					.panel(panel)
+					.build();
+			clientToolbar.addNavigation(sideButton);
+		}
 
 		overlayManager.add(petNameOverlay);
 	}
