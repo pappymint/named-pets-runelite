@@ -10,15 +10,12 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.ui.ClientToolbar;
-import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.components.colorpicker.ColorPickerManager;
 import net.runelite.client.ui.components.colorpicker.RuneliteColorPicker;
 import net.runelite.client.ui.overlay.OverlayManager;
-import net.runelite.client.util.ImageUtil;
 import javax.inject.Inject;
 import javax.swing.*;
 import java.applet.Applet;
-import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.util.Objects;
 
@@ -30,9 +27,6 @@ import java.util.Objects;
 )
 public class NamedPetsPlugin extends Plugin
 {
-	private static final BufferedImage SidePanelIcon = ImageUtil.loadImageResource(NamedPetsPlugin.class, "icon.png");
-	private NavigationButton sideButton;
-	private NamedPetsPanel panel;
 	private NamedPetsConfigManager pluginConfigManager;
 
 	@Inject
@@ -57,18 +51,6 @@ public class NamedPetsPlugin extends Plugin
 		// Overlay manager renders the names above the pet
 		pluginConfigManager = new NamedPetsConfigManager(this, configManager);
 
-		// Panel is the menu item along the side to configure & view set pet names
-		if (!config.hidePetPanel()) {
-			panel = new NamedPetsPanel(this, config, pluginConfigManager);
-			sideButton = NavigationButton.builder()
-					.tooltip("Named Pets")
-					.icon(SidePanelIcon)
-					.priority(9)
-					.panel(panel)
-					.build();
-			clientToolbar.addNavigation(sideButton);
-		}
-
 		overlayManager.add(petNameOverlay);
 	}
 
@@ -76,7 +58,6 @@ public class NamedPetsPlugin extends Plugin
 	protected void shutDown() throws Exception
 	{
 		overlayManager.remove(petNameOverlay);
-		clientToolbar.removeNavigation(sideButton);
 	}
 
 	@Subscribe
@@ -145,26 +126,23 @@ public class NamedPetsPlugin extends Plugin
 				.value(getExistingPetName(pet.getId()))
 				.onDone((input) ->
 				{
-					savePetName(pet.getId(), input);
+					savePetName(pet, input);
 				})
 				.build();
 	}
 
 	/**
 	 * Save a pet name into config manager
-	 * @param petNpcId Pet NPC ID
+	 * @param petNpc Pet NPC
 	 * @param petName Pet name to save
 	 */
-	private void savePetName(int petNpcId, String petName)
+	private void savePetName(NPC petNpc, String petName)
 	{
 		if (Objects.equals(petName, "") || petName == null) {
-			pluginConfigManager.unsetPetName(petNpcId);
+			pluginConfigManager.unsetPetName(petNpc.getId());
 		} else {
-			pluginConfigManager.setPetName(petNpcId, petName);
-		}
-
-		if (!config.hidePetPanel()) {
-			panel.renderPetsList();
+			pluginConfigManager.setPetName(petNpc.getId(), petName);
+			pluginConfigManager.setPetNPCName(petNpc.getId(), petNpc.getName());
 		}
 	}
 
@@ -185,10 +163,6 @@ public class NamedPetsPlugin extends Plugin
 	private void saveNameColor(int petNpcId, Color nameColor)
 	{
 		pluginConfigManager.setPetColor(petNpcId, nameColor);
-
-		if (!config.hidePetPanel()) {
-			panel.renderPetsList();
-		}
 	}
 
 	private Color getExistingPetNameColor(int petNpcId)

@@ -1,9 +1,6 @@
 package com.pappymint.namedpets;
 
-import net.runelite.api.GameState;
-import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.Subscribe;
 
 import javax.inject.Inject;
 import java.awt.*;
@@ -16,6 +13,7 @@ public class NamedPetsConfigManager {
     public static final String CONFIG_GROUP = "namedPets";
     public static final String CONFIG_NAME = "name";
     public static final String CONFIG_COLOR = "color";
+    public static final String CONFIG_NPC_NAME = "npcName";
 
     @Inject
     NamedPetsConfigManager(NamedPetsPlugin plugin, ConfigManager configManager) {
@@ -29,28 +27,34 @@ public class NamedPetsConfigManager {
     private String colorConfigKey(int petId) {
         return CONFIG_COLOR + "-" + petId;
     }
+    private String npcNameConfigKey(int petId) {
+        return CONFIG_NPC_NAME + "-" + petId;
+    }
 
     // *** Pet Name Getters/Setters ***
     public String getSavedPetName(int petId) {
-        return configManager.getConfiguration(CONFIG_GROUP, nameConfigKey(petId));
+        return configManager.getRSProfileConfiguration(CONFIG_GROUP, nameConfigKey(petId));
     }
     public void setPetName(int petId, String petName) {
-        configManager.setConfiguration(CONFIG_GROUP, nameConfigKey(petId), petName);
+        configManager.setRSProfileConfiguration(CONFIG_GROUP, nameConfigKey(petId), petName);
     }
     public void unsetPetName(int petId) {
-        configManager.unsetConfiguration(CONFIG_GROUP, nameConfigKey(petId));
+        configManager.unsetRSProfileConfiguration(CONFIG_GROUP, nameConfigKey(petId));
     }
 
     // *** Pet Color Getters/Setters ***
     public String getSavedPetColor(int petId) {
-        return configManager.getConfiguration(CONFIG_GROUP, colorConfigKey(petId));
+        return configManager.getRSProfileConfiguration(CONFIG_GROUP, colorConfigKey(petId));
     }
     public void setPetColor(int petId, Color petNameColor) {
-        configManager.setConfiguration(CONFIG_GROUP, colorConfigKey(petId), petNameColor);
+        configManager.setRSProfileConfiguration(CONFIG_GROUP, colorConfigKey(petId), petNameColor);
     }
 
-    // *** Pet List ***
-    public List<String> getAllPetConfig() {
-        return configManager.getConfigurationKeys(CONFIG_GROUP + '.' + CONFIG_NAME);
+    // *** Pet NPC Name Getters/Setters ***
+    public String getPetNPCName(int petId) {
+        return configManager.getRSProfileConfiguration(CONFIG_GROUP, npcNameConfigKey(petId));
+    }
+    public void setPetNPCName(int petId, String npcName) {
+        configManager.setRSProfileConfiguration(CONFIG_GROUP, npcNameConfigKey(petId), npcName);
     }
 }
