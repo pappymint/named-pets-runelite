@@ -40,7 +40,7 @@ public class NamedPetsPlugin extends Plugin
 	@Inject
 	private OverlayManager overlayManager;
 	@Inject
-	private PetNameOverlay petNameOverlay;
+	private NamedPetsOverlay petNameOverlay;
 	@Inject
 	private ClientToolbar clientToolbar;
 	@Inject
@@ -48,9 +48,7 @@ public class NamedPetsPlugin extends Plugin
 
 	@Override
 	protected void startUp() throws Exception {
-		// Overlay manager renders the names above the pet
 		pluginConfigManager = new NamedPetsConfigManager(this, configManager);
-
 		overlayManager.add(petNameOverlay);
 	}
 

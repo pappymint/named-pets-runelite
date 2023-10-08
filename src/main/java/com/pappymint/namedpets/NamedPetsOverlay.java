@@ -4,7 +4,6 @@ import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.Actor;
 import net.runelite.api.Point;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -13,7 +12,7 @@ import net.runelite.client.ui.overlay.OverlayUtil;
 import java.awt.*;
 import javax.inject.Inject;
 
-public class PetNameOverlay extends Overlay
+public class NamedPetsOverlay extends Overlay
 {
     private final NamedPetsConfig pluginConfig;
     private final NamedPetsPlugin plugin;
@@ -23,7 +22,7 @@ public class PetNameOverlay extends Overlay
     private Client client;
 
     @Inject
-    private PetNameOverlay(NamedPetsPlugin plugin, NamedPetsConfig pluginConfig, NamedPetsConfigManager configManager)
+    private NamedPetsOverlay(NamedPetsPlugin plugin, NamedPetsConfig pluginConfig, NamedPetsConfigManager configManager)
     {
         setPosition(OverlayPosition.DYNAMIC);
         setLayer(OverlayLayer.ABOVE_SCENE);
