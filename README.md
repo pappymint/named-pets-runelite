@@ -5,13 +5,13 @@ A Runelite plugin to give your beloved pets a name!
 
 <img src="https://github.com/pappymint/named-pets-runelite/assets/80610660/e0c8fb77-f046-4c1f-81b4-24cc8d95067d" width="50%" />
 
-Table of contents
-* [How to name your pet]()
-* [Recoloring a name]()
-* [Removing a name]()
-* [Plugin configuration]()
-* [Planned future improvements]()
-* [Reporting an issue / make a suggestion]()
+Table of contents:
+* [How to name your pet](#how-to-name-your-pet)
+* [Recoloring a name](#coloring-the-name)
+* [Removing a name](#removing-a-pets-name)
+* [Plugin configuration](#plugin-configuration)
+* [Planned future improvements](#planned-future-improvements)
+* [Reporting an issue / make a suggestion](#found-an-issue)
 
 ---
 
@@ -51,8 +51,9 @@ To remove the pets name, rename it and leave the name BLANK.
 * Ability to name and show pets in POHs
 * Support emojis in pet names
 
-<strong>Found an issue?</strong><br/>
-Please report any bugs or issues in the 'Issues' tab of this repository.
+---
 
-<strong>Want to make a suggestion or feature request?</strong><br/>
+#### Found an issue?
+Please report any bugs or issues in the 'Issues' tab of this repository.
+#### Want to make a suggestion or feature request?
 Please feel free to fill it out as an issue on GH or email me (you can find my email in GH profile section).
