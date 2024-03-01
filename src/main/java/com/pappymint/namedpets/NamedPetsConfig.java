@@ -25,4 +25,11 @@ public interface NamedPetsConfig extends Config
 			description = "A default color for pet names. If you individually set a color for a pet name, that will be set first."
 	)
 	default Color getDefaultPetNameColor() { return new Color(255, 255, 255); }
+
+	@ConfigItem(
+			keyName = "enablePOHPetNames",
+			name = "Show names over POH pets",
+			description = "Be able to view and name pets in your player owned home"
+	)
+	default Boolean petNamesPOHEnabled () { return true; }
 }
