@@ -31,5 +31,5 @@ public interface NamedPetsConfig extends Config
 			name = "Show names over POH pets",
 			description = "Be able to view and name pets in your player owned home"
 	)
-	default Boolean petNamesPOHEnabled () { return true; }
+	default boolean petNamesPOHEnabled () { return true; }
 }
