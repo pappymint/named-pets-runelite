@@ -24,36 +24,44 @@ public class NamedPetsOverlay extends Overlay
     @Inject
     private NamedPetsOverlay(NamedPetsPlugin plugin, NamedPetsConfig pluginConfig, NamedPetsConfigManager configManager)
     {
+        this.plugin = plugin;
         setPosition(OverlayPosition.DYNAMIC);
         setLayer(OverlayLayer.ABOVE_SCENE);
 
         this.pluginConfig = pluginConfig;
         this.configManager = configManager;
-        this.plugin = plugin;
     }
 
     @Override
     public Dimension render(Graphics2D graphics) {
         NPC follower = client.getFollower();
-        if (follower == null) {
-            return null;
+        if (follower != null) {
+            renderPetName(graphics, follower, follower.getId());
         }
 
-        renderFollowingPetName(graphics, follower, follower.getId());
+        if (pluginConfig.petNamesPOHEnabled()) {
+            for (NPC pohPet : plugin.getPOHPetRenderList()) {
+                // TODO - Find a way to map follow NPC id to POH pet NPC id (they're different)
+                renderPetName(graphics, pohPet, pohPet.getId());
+            }
+        }
+
         return null;
     }
 
-    private void renderFollowingPetName(Graphics2D graphics, Actor petActor, int petId) {
+    private void renderPetName(Graphics2D graphics, Actor petActor, int petId) {
         // Gets stored pet name + name color from config manager
-        String followingPetName = configManager.getSavedPetName(petId);
-        Color nameColor = getPetNameColor(petId);
+        String storedPetName = configManager.getSavedPetName(petId);
+        if (storedPetName != null && !storedPetName.isEmpty()) {
+            Color nameColor = getPetNameColor(petId);
 
-        // Default config height to 0 if it isnt between 1 - 100
-        int customHeightIncrease = pluginConfig.getCustomPosition() > 0 && pluginConfig.getCustomPosition() <= 100 ? pluginConfig.getCustomPosition() : 0;
-        Point petNameLocation = petActor.getCanvasTextLocation(graphics, followingPetName, petActor.getModelHeight() + customHeightIncrease);
+            // Default config height to 0 if it isnt between 1 - 100
+            int customHeightIncrease = pluginConfig.getCustomPosition() > 0 && pluginConfig.getCustomPosition() <= 100 ? pluginConfig.getCustomPosition() : 0;
+            Point petNameLocation = petActor.getCanvasTextLocation(graphics, storedPetName, petActor.getModelHeight() + customHeightIncrease);
 
-        if (petNameLocation != null) {
-            OverlayUtil.renderTextLocation(graphics, petNameLocation, followingPetName, nameColor);
+            if (petNameLocation != null) {
+                OverlayUtil.renderTextLocation(graphics, petNameLocation, storedPetName, nameColor);
+            }
         }
     }
 

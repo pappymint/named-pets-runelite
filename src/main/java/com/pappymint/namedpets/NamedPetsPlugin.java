@@ -4,6 +4,8 @@ import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.MenuOpened;
+import net.runelite.api.events.NpcDespawned;
+import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
@@ -17,13 +19,15 @@ import javax.inject.Inject;
 import javax.swing.*;
 import java.applet.Applet;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Slf4j
 @PluginDescriptor(
 	name = "Named Pets",
-	description = "Right click & name your fluffy friend!",
-	tags = {"pet"}
+	description = "Right click & give your pets a name!",
+	tags = {"name", "pet"}
 )
 public class NamedPetsPlugin extends Plugin
 {
@@ -46,6 +50,14 @@ public class NamedPetsPlugin extends Plugin
 	@Inject
 	private ColorPickerManager colorPickerManager;
 
+	@Provides
+	NamedPetsConfig getConfig(ConfigManager configManager)
+	{
+		return configManager.getConfig(NamedPetsConfig.class);
+	}
+
+	private ArrayList<NPC> pohPets = new ArrayList<>();
+
 	@Override
 	protected void startUp() throws Exception {
 		pluginConfigManager = new NamedPetsConfigManager(this, configManager);
@@ -62,6 +74,29 @@ public class NamedPetsPlugin extends Plugin
 	public void onMenuOpened(MenuOpened menuOpened)
 	{
 		checkIfMenuOptionsBelongToFollower(menuOpened.getMenuEntries());
+	}
+
+	@Subscribe
+	public void onNpcSpawned(NpcSpawned event)
+	{
+		if (config.petNamesPOHEnabled()) {
+			NPC spawnedNpc = event.getNpc();
+			NPCComposition npcComposition = spawnedNpc.getComposition();
+			String[] actions = npcComposition.getActions();
+
+			// Has menu option 'Pick-up' and is not following the player
+			if (Arrays.asList(actions).contains("Pick-up") && !npcComposition.isFollower()) {
+                addNewPOHPetToRenderList(spawnedNpc);
+			}
+		}
+	}
+
+	@Subscribe
+	public void onNpcDespawned(NpcDespawned event)
+	{
+		// Unsubscribe pet from render list
+		NPC npcDespawned = event.getNpc();
+		removePOHPetFromRenderList(npcDespawned);
 	}
 
 	private void checkIfMenuOptionsBelongToFollower(MenuEntry[] menuEntries)
@@ -172,9 +207,26 @@ public class NamedPetsPlugin extends Plugin
 		return Color.white;
 	}
 
-	@Provides
-	NamedPetsConfig provideConfig(ConfigManager configManager)
+	public ArrayList<NPC> getPOHPetRenderList() {
+		return pohPets;
+	}
+
+	public void addNewPOHPetToRenderList(NPC newPet)
 	{
-		return configManager.getConfig(NamedPetsConfig.class);
+		if (!isPetInPOHRenderList(newPet)) {
+			pohPets.add(newPet);
+		}
+	}
+
+	public void removePOHPetFromRenderList(NPC petToRemove)
+	{
+		if (isPetInPOHRenderList(petToRemove)) {
+			pohPets.remove(petToRemove);
+		}
+	}
+
+	public boolean isPetInPOHRenderList(NPC pet)
+	{
+		return pohPets.contains(pet);
 	}
 }
