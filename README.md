@@ -41,6 +41,7 @@ To remove the pets name, rename it and leave the name BLANK.
 ## Plugin configuration
 * Adjust name position: Move the name position vertically (any number from 0 - 100).
 * Global pet color name: Handy if you want to set all your pets name one color. Any custom set color for a pet will override this.
+
 ![image](https://github.com/pappymint/named-pets-runelite/assets/80610660/a3be16fa-a68f-419c-b0a2-1198edadafa3)
 
 
