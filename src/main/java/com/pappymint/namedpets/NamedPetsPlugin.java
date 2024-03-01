@@ -122,46 +122,57 @@ public class NamedPetsPlugin extends Plugin
 
 	private void addNamePetMenuOption(NPC pet, int index, MenuEntry menuEntry) {
 		client.createMenuEntry(index)
-				.setOption("Name")
-				.setTarget(menuEntry.getTarget())
-				.setType(MenuAction.RUNELITE)
-				.onClick(e -> onNameMenuEntryOptionClicked(pet));
+			.setOption("Name")
+			.setTarget(menuEntry.getTarget())
+			.setType(MenuAction.RUNELITE)
+			.onClick(e -> onNameMenuEntryOptionClicked(pet));
 	}
 
 	private void addColorNameMenuOption(NPC pet, int index, MenuEntry menuEntry) {
-		if (!getExistingPetName(pet.getId()).isEmpty()) {
-			MenuEntry nameColorEntry = client.createMenuEntry(index)
-					.setOption("Color Name")
-					.setTarget(menuEntry.getTarget())
-					.setType(MenuAction.RUNELITE_SUBMENU);
+		int petId = pet.getId();
+		if (!getExistingPetName(petId).isEmpty()) {
+			// Add remove color option if color is set
 
 			client.createMenuEntry(index)
-					.setOption("Pick")
-					.setParent(nameColorEntry)
-					.setType(MenuAction.RUNELITE)
-					.onClick(e ->
-					{
-						Color existingColor = getExistingPetNameColor(pet.getId());
+				.setOption("Color Name")
+				.setTarget(menuEntry.getTarget())
+				.onClick(e ->
+				{
+					Color existingColor = getExistingPetNameColor(petId);
 
-						SwingUtilities.invokeLater(() ->
-						{
-							RuneliteColorPicker colorPicker = colorPickerManager.create(SwingUtilities.windowForComponent((Applet) client),
-									existingColor, "Pet Name Color", false);
-							colorPicker.setOnClose(color -> saveNameColor(pet.getId(), color));
-							colorPicker.setVisible(true);
-						});
+					SwingUtilities.invokeLater(() ->
+					{
+						RuneliteColorPicker colorPicker = colorPickerManager.create(SwingUtilities.windowForComponent((Applet) client),
+								existingColor, "Pet Name Color", false);
+						colorPicker.setOnClose(color -> saveNameColor(petId, color));
+						colorPicker.setVisible(true);
 					});
+				});
+
+
+			if (
+				pluginConfigManager.getSavedPetColor(petId) != null &&
+				!pluginConfigManager.getSavedPetColor(petId).isEmpty()
+			) {
+				client.createMenuEntry(index + 1)
+						.setOption("Remove Name Color")
+						.setTarget(menuEntry.getTarget())
+						.onClick(e ->
+						{
+							pluginConfigManager.unsetPetColor(petId);
+						});
+			}
 		}
 	}
 
 	private void onNameMenuEntryOptionClicked(NPC pet) {
 		chatboxPanelManager.openTextInput("Name your " + pet.getName())
-				.value(getExistingPetName(pet.getId()))
-				.onDone((input) ->
-				{
-					savePetName(pet, input);
-				})
-				.build();
+			.value(getExistingPetName(pet.getId()))
+			.onDone((input) ->
+			{
+				savePetName(pet, input);
+			})
+			.build();
 	}
 
 	/**

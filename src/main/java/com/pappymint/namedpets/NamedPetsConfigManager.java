@@ -48,6 +48,9 @@ public class NamedPetsConfigManager {
     public void setPetColor(int petId, Color petNameColor) {
         configManager.setRSProfileConfiguration(CONFIG_GROUP, colorConfigKey(petId), petNameColor);
     }
+    public void unsetPetColor(int petId) {
+        configManager.unsetRSProfileConfiguration(CONFIG_GROUP, colorConfigKey(petId));
+    }
 
     // *** Pet NPC Name Getters/Setters ***
     public String getPetNPCName(int petId) {
