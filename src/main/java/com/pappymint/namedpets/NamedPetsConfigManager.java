@@ -4,11 +4,11 @@ import net.runelite.client.config.ConfigManager;
 
 import javax.inject.Inject;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NamedPetsConfigManager {
     private final ConfigManager configManager;
-    private final NamedPetsPlugin plugin;
 
     public static final String CONFIG_GROUP = "namedPets";
     public static final String CONFIG_NAME = "name";
@@ -18,7 +18,6 @@ public class NamedPetsConfigManager {
     @Inject
     NamedPetsConfigManager(NamedPetsPlugin plugin, ConfigManager configManager) {
         this.configManager = configManager;
-        this.plugin = plugin;
     }
 
     private String nameConfigKey(int petId) {
@@ -56,5 +55,21 @@ public class NamedPetsConfigManager {
     }
     public void setPetNPCName(int petId, String npcName) {
         configManager.setRSProfileConfiguration(CONFIG_GROUP, npcNameConfigKey(petId), npcName);
+    }
+
+    public List<Integer> getAllSavedPetIds() {
+        List<Integer> idList = new ArrayList<>();
+
+        final String profileKey = configManager.getRSProfileKey();
+        List<String> configKeys = configManager.getRSProfileConfigurationKeys(CONFIG_GROUP, profileKey, CONFIG_NAME);
+
+        for (String key : configKeys) {
+            String prefix = CONFIG_NAME + "-";
+            if (key.startsWith(prefix)) {
+                idList.add(Integer.valueOf(key.replace(prefix, "")));
+            }
+        }
+
+        return idList;
     }
 }

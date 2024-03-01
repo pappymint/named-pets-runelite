@@ -4,12 +4,15 @@ import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.Actor;
 import net.runelite.api.Point;
+import net.runelite.client.game.NPCManager;
+import net.runelite.client.game.NpcInfo;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
 import java.awt.*;
+import java.util.Objects;
 import javax.inject.Inject;
 
 public class NamedPetsOverlay extends Overlay
@@ -17,12 +20,18 @@ public class NamedPetsOverlay extends Overlay
     private final NamedPetsConfig pluginConfig;
     private final NamedPetsPlugin plugin;
     private final NamedPetsConfigManager configManager;
+    private final NPCManager npcManager;
 
     @Inject
     private Client client;
 
     @Inject
-    private NamedPetsOverlay(NamedPetsPlugin plugin, NamedPetsConfig pluginConfig, NamedPetsConfigManager configManager)
+    private NamedPetsOverlay(
+            NamedPetsPlugin plugin,
+            NamedPetsConfig pluginConfig,
+            NamedPetsConfigManager configManager,
+            NPCManager npcManager
+    )
     {
         this.plugin = plugin;
         setPosition(OverlayPosition.DYNAMIC);
@@ -30,6 +39,7 @@ public class NamedPetsOverlay extends Overlay
 
         this.pluginConfig = pluginConfig;
         this.configManager = configManager;
+        this.npcManager = npcManager;
     }
 
     @Override
@@ -40,10 +50,7 @@ public class NamedPetsOverlay extends Overlay
         }
 
         if (pluginConfig.petNamesPOHEnabled()) {
-            for (NPC pohPet : plugin.getPOHPetRenderList()) {
-                // TODO - Find a way to map follow NPC id to POH pet NPC id (they're different)
-                renderPetName(graphics, pohPet, pohPet.getId());
-            }
+            renderPOHPetNames(graphics);
         }
 
         return null;
@@ -75,6 +82,23 @@ public class NamedPetsOverlay extends Overlay
             return defaultConfigColor;
         } else {
             return Color.white;
+        }
+    }
+
+    /**
+     * POH pet ids are different to follower NPC pet IDs. We must find a mapping
+     * between the two to successfully find the appropriate set name for a POH pet.
+     * @param graphics Graphics2D for rendering
+     */
+    private void renderPOHPetNames(Graphics2D graphics) {
+        for (NPC pohPet : plugin.getPOHPetRenderList()) {
+            // Only use the follower NPC id for naming, retrieving.
+
+            for (int existingFollowerId : configManager.getAllSavedPetIds()) {
+                if (Objects.equals(pohPet.getName(), configManager.getPetNPCName(existingFollowerId))) {
+                    renderPetName(graphics, pohPet, existingFollowerId);
+                }
+            }
         }
     }
 }
