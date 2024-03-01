@@ -4,7 +4,6 @@ import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.Actor;
 import net.runelite.api.Point;
-import net.runelite.client.game.NPCManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -19,18 +18,12 @@ public class NamedPetsOverlay extends Overlay
     private final NamedPetsConfig pluginConfig;
     private final NamedPetsPlugin plugin;
     private final NamedPetsConfigManager configManager;
-    private final NPCManager npcManager;
 
     @Inject
     private Client client;
 
     @Inject
-    private NamedPetsOverlay(
-            NamedPetsPlugin plugin,
-            NamedPetsConfig pluginConfig,
-            NamedPetsConfigManager configManager,
-            NPCManager npcManager
-    )
+    private NamedPetsOverlay(NamedPetsPlugin plugin, NamedPetsConfig pluginConfig, NamedPetsConfigManager configManager)
     {
         this.plugin = plugin;
         setPosition(OverlayPosition.DYNAMIC);
@@ -38,7 +31,6 @@ public class NamedPetsOverlay extends Overlay
 
         this.pluginConfig = pluginConfig;
         this.configManager = configManager;
-        this.npcManager = npcManager;
     }
 
     @Override
