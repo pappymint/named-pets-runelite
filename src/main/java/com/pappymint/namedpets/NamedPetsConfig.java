@@ -32,4 +32,11 @@ public interface NamedPetsConfig extends Config
 			description = "View and name pets in your player owned home"
 	)
 	default boolean petNamesPOHEnabled () { return true; }
+
+	@ConfigItem(
+			keyName = "replaceMenuPetname",
+			name = "Replace Menu Pet Name",
+			description = "Replace the right click pet with the pet name"
+	)
+	default boolean replaceMenuPetName () { return false; }
 }

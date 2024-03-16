@@ -121,12 +121,14 @@ public class NamedPetsPlugin extends Plugin
 	}
 
 	private void addNamePetMenuOption(NPC pet, int index, MenuEntry menuEntry, MenuEntry[] menuEntries) {
-		int petId = pet.getId();
-		String petName = getExistingPetName(petId);
-		if (pet.getName() != null) {
-			for (MenuEntry menuEntry1 : menuEntries) {
-				if (menuEntry1.getTarget() != null && menuEntry1.getTarget().contains(pet.getName())) {
-					menuEntry1.setTarget(menuEntry1.getTarget().replace(pet.getName(), petName));
+		if (config.replaceMenuPetName()) {
+			int petId = pet.getId();
+			String petName = getExistingPetName(petId);
+			if (pet.getName() != null) {
+				for (MenuEntry menuEntry1 : menuEntries) {
+					if (menuEntry1.getTarget() != null && menuEntry1.getTarget().contains(pet.getName())) {
+						menuEntry1.setTarget(menuEntry1.getTarget().replace(pet.getName(), petName));
+					}
 				}
 			}
 		}
