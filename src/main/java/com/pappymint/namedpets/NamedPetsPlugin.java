@@ -113,14 +113,23 @@ public class NamedPetsPlugin extends Plugin
 
 			if (targetedNpc != null && targetedNpc.getId() == myFollowerNPC.getId()) {
 				// Add menu entry at index below this option - e.g. "Name Overgrown Hellcat"
-				addNamePetMenuOption(targetedNpc, entryIndex, entry);
+				addNamePetMenuOption(targetedNpc, entryIndex, entry, menuEntries);
 				addColorNameMenuOption(targetedNpc, entryIndex, entry);
 				break;
 			}
 		}
 	}
 
-	private void addNamePetMenuOption(NPC pet, int index, MenuEntry menuEntry) {
+	private void addNamePetMenuOption(NPC pet, int index, MenuEntry menuEntry, MenuEntry[] menuEntries) {
+		int petId = pet.getId();
+		String petName = getExistingPetName(petId);
+		if (pet.getName() != null) {
+			for (MenuEntry menuEntry1 : menuEntries) {
+				if (menuEntry1.getTarget() != null && menuEntry1.getTarget().contains(pet.getName())) {
+					menuEntry1.setTarget(menuEntry1.getTarget().replace(pet.getName(), petName));
+				}
+			}
+		}
 		client.createMenuEntry(index)
 			.setOption("Name")
 			.setTarget(menuEntry.getTarget())
