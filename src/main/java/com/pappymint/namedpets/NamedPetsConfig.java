@@ -35,8 +35,8 @@ public interface NamedPetsConfig extends Config
 
 	@ConfigItem(
 			keyName = "replaceMenuPetname",
-			name = "Replace Menu Pet Name",
-			description = "Replace the right click pet with the pet name"
+			name = "Replace Menu Option Pet Name",
+			description = "Replace the right-click menu option with the pet name"
 	)
 	default boolean replaceMenuPetName () { return false; }
 }
