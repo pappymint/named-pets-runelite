@@ -88,8 +88,8 @@ public class NamedPetsOverlay extends Overlay
             for (int existingFollowerId : configManager.getAllSavedPetIds()) {
                 if (Objects.equals(pohPet.getName(), configManager.getPetNPCName(existingFollowerId))) {
                     renderPetName(graphics, pohPet, existingFollowerId);
+                    break;
                 }
-                break;
             }
         }
     }
