@@ -85,14 +85,11 @@ public class NamedPetsOverlay extends Overlay
         for (NPC pohPet : plugin.getPOHPetRenderList()) {
             // Only use the follower NPC id for naming, retrieving.
 
-            // TODO - may have to make a special exception for pets that you can have multiple of. Like cats and kittens
-            // May have to create a manual mapping between follower cat NPC ids and POH cat NPC ids
-            // If pohPet.getName() == 'Cat'
-
             for (int existingFollowerId : configManager.getAllSavedPetIds()) {
                 if (Objects.equals(pohPet.getName(), configManager.getPetNPCName(existingFollowerId))) {
                     renderPetName(graphics, pohPet, existingFollowerId);
                 }
+                break;
             }
         }
     }
