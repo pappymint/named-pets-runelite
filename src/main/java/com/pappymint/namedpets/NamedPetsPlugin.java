@@ -177,27 +177,30 @@ public class NamedPetsPlugin extends Plugin
 	}
 
 	private void onNameMenuEntryOptionClicked(NPC pet) {
+		int petId = pet.getId();
+		String petNPCName = pet.getName();
 		chatboxPanelManager.openTextInput("Name your " + pet.getName())
 			.value(getExistingPetName(pet.getId()))
 			.onDone((input) ->
 			{
-				savePetName(pet, input);
+				savePetName(petId, petNPCName, input);
 			})
 			.build();
 	}
 
 	/**
 	 * Save a pet name into config manager
-	 * @param petNpc Pet NPC
+	 * @param petId Pet Id
+	 * @param petNPCName NPC name of pet
 	 * @param petName Pet name to save
 	 */
-	private void savePetName(NPC petNpc, String petName)
+	private void savePetName(int petId, String petNPCName, String petName)
 	{
 		if (Objects.equals(petName, "") || petName == null) {
-			pluginConfigManager.unsetPetName(petNpc.getId());
+			pluginConfigManager.unsetPetName(petId);
 		} else {
-			pluginConfigManager.setPetName(petNpc.getId(), petName);
-			pluginConfigManager.setPetNPCName(petNpc.getId(), petNpc.getName());
+			pluginConfigManager.setPetName(petId, petName);
+			pluginConfigManager.setPetNPCName(petId, petNPCName);
 		}
 	}
 
