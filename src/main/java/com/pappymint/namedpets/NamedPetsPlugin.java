@@ -179,8 +179,8 @@ public class NamedPetsPlugin extends Plugin
 	private void onNameMenuEntryOptionClicked(NPC pet) {
 		int petId = pet.getId();
 		String petNPCName = pet.getName();
-		chatboxPanelManager.openTextInput("Name your " + pet.getName())
-			.value(getExistingPetName(pet.getId()))
+		chatboxPanelManager.openTextInput("Name your " + petNPCName)
+			.value(getExistingPetName(petId))
 			.onDone((input) ->
 			{
 				savePetName(petId, petNPCName, input);
@@ -192,7 +192,7 @@ public class NamedPetsPlugin extends Plugin
 	 * Save a pet name into config manager
 	 * @param petId Pet Id
 	 * @param petNPCName NPC name of pet
-	 * @param petName Pet name to save
+	 * @param petName Custom pet name to save
 	 */
 	private void savePetName(int petId, String petNPCName, String petName)
 	{
