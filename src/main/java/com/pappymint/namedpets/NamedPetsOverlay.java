@@ -58,6 +58,11 @@ public class NamedPetsOverlay extends Overlay
             Point petNameLocation = petActor.getCanvasTextLocation(graphics, storedPetName, petActor.getModelHeight() + customHeightIncrease);
 
             if (petNameLocation != null) {
+                // Set custom font size
+                int fontSize = pluginConfig.petNameFontSize(); // Use default or user-set size
+                Font originalFont = graphics.getFont();
+                graphics.setFont(originalFont.deriveFont((float) fontSize));
+
                 OverlayUtil.renderTextLocation(graphics, petNameLocation, storedPetName, nameColor);
             }
         }

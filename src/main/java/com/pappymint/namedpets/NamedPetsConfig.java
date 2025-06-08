@@ -1,18 +1,20 @@
 package com.pappymint.namedpets;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.*;
 
 import java.awt.Color;
 
 @ConfigGroup("namedpets")
 public interface NamedPetsConfig extends Config
 {
+	@Range(
+			min = 0,
+			max = 100
+	)
 	@ConfigItem(
 		keyName = "position",
 		name = "Adjust Name Position",
-		description = "Adjust the position the name above the pet (0 - 100)"
+		description = "Adjust position of name above the pet."
 	)
 	default int getCustomPosition()
 	{
@@ -26,17 +28,28 @@ public interface NamedPetsConfig extends Config
 	)
 	default Color getDefaultPetNameColor() { return new Color(255, 255, 255); }
 
+	@Range(
+			min = 10,
+			max = 40
+	)
+	@ConfigItem(
+			keyName = "petNameFontSize",
+			name = "Font Size",
+			description = "Font size for pet name display."
+	)
+	default int petNameFontSize() { return 16; }
+
 	@ConfigItem(
 			keyName = "enablePOHPetNames",
 			name = "Name POH pets",
-			description = "View and name pets in your player owned home"
+			description = "View name above pets in your player owned home."
 	)
 	default boolean petNamesPOHEnabled () { return true; }
 
 	@ConfigItem(
 			keyName = "replaceMenuPetname",
 			name = "Replace Menu Option Pet Name",
-			description = "Replace the right-click menu option with the pet name"
+			description = "Replace the right-click menu option NPC name with the pet name."
 	)
 	default boolean replaceMenuPetName () { return false; }
 }
